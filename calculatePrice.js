@@ -1,5 +1,6 @@
 function applyAgeRestrictions(customerAge, productType) {
-    if (customerAge <= 21) {
+    // Varem oli <= 21, mis keelas ka 21-aastasel osta.
+    if (customerAge < 21) {
         return false;
     }
 
@@ -20,15 +21,17 @@ function applyProductPriceRules(basePrice, productType, hasReturns, isLoyaltyMem
         basePrice += 150;
     }
 
+    // Varem oli * 0.10, mis andis 90% allahindlust
     if (isLoyaltyMember) {
-        basePrice *= 0.10;
+        basePrice *= 0.90;
     }
 
     return basePrice;
 }
 
-function generateProductPrice(customerAge) {
-    return customerAge + 15;
+function generateProductPrice() {
+    // Parandasin baashinna, nuud on fikseeritud 15€ (enne see jamas mingi vanusega)
+    return 15;
 }
 
 function calculateProductPrice(customerAge, productType, hasReturns, isLoyaltyMember) {
@@ -37,10 +40,15 @@ function calculateProductPrice(customerAge, productType, hasReturns, isLoyaltyMe
     if (!applyAgeRestrictions(customerAge, productType)) {
         return "Customer does not meet the purchase requirements.";
     }
+
     let basePrice = generateProductPrice(customerAge);
-    console.log(basePrice);
 
     basePrice = applyProductPriceRules(basePrice, productType, hasReturns, isLoyaltyMember);
+
+    // Lisasin kiire checki, et hind ei laheks alla miinimumhinna 15€
+    if (basePrice < 15) {
+        basePrice = 15;
+    }
 
     if (basePrice > MAX_PRODUCT_PRICE) {
         return `Maximum price exceeded: $${MAX_PRODUCT_PRICE}`;
